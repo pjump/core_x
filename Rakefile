@@ -15,9 +15,9 @@ task "release" => :github_repo
 task :github_repo do
   unless repo_exists?(gemspec.homepage)
     sh %Q{curl -X POST https://api.github.com/user/repos -H "Authorization: token `git config github.token`" -d ' { "name": "#{gemspec.name}" } '}
+    sh *%w[git remote add origin], "git@github.com:#{`git config github.user`.chomp}/#{gemspec.name}"
+    sh *%w[git push --set-upstream origin master]
   end
-  sh *%w[git remote add origin], "git@github.com:#{`git config github.user`.chomp}/#{gemspec.name}"
-  sh *%w[git push --set-upstream origin master]
 end
 
 
